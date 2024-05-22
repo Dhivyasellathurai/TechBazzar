@@ -12,26 +12,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "sales")
-public class User {
+@AllArgsConstructor
+@Data
+@Table(name = "addtocart")
+public class AddToCart {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
-	
+
+	@Column(name = "product_id")
+	private int productId;
+
 	@Column(name = "customer_id")
 	private int customerId;
-	
-	@Column(name = "email")
-	private String email;
 
-	@Column(name = "user_name")
-	private String userName;
+	@Column(name = "quantity")
+	private int quantity;
 
-	@Column(name = "password")
-	public String password;
+	@Column(name = "product_price")
+	private double productPrice;
+
+	@Column(name = "total_amount")
+	private double totalAmount;
+
 }

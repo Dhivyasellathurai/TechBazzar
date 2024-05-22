@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Resource(name = "userService")
 	private UserDetailsService userDetailsService;
@@ -49,6 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		return new BCryptPasswordEncoder();
 	}
 
+	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/v2/api-docs")//
 				.antMatchers("/swagger-resources/**")//
@@ -60,10 +61,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 				.antMatchers("/h2-console/**/**");
 	}
 
+	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable().authorizeRequests().antMatchers("user/login").permitAll().anyRequest()
-				.authenticated().and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.cors().and().csrf().disable().authorizeRequests()
+				.antMatchers("/user/login", "/swagger-ui.html", "/app/sales/**", "/api/customer/**", "/api/cart/**")
+				.permitAll().anyRequest().authenticated().and().exceptionHandling()
+				.authenticationEntryPoint(unauthorizedHandler).and().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 	}
 
